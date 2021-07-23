@@ -1,0 +1,118 @@
+<canvas width="600" height="400"></canvas>
+
+<script>
+
+    var tela = document.querySelector('canvas');
+    var pincel = tela.getContext('2d');
+    pincel.fillStyle = 'lightgray';
+    pincel.fillRect(0, 0, 600, 400);
+
+    var x = 20;
+    var y = 20;
+
+    // códigos do teclado
+    var esquerda = 37;
+    var cima = 38;
+    var direita = 39;
+    var baixo = 40;
+
+    // taxa de incremento
+    var taxa = 10; 
+
+    function desenhaCirculo(x, y, raio) {
+
+        pincel.fillStyle = 'blue';
+        pincel.beginPath();
+        pincel.arc(x, y, raio, 0, 2 * Math.PI);
+        pincel.fill();
+    }
+
+    function limpaTela() {
+
+        pincel.clearRect(0, 0, 600, 400);
+    }
+
+    function atualizaTela() {
+
+        limpaTela();
+
+        desenhaObstaculos();
+
+        desenhaCirculo(x, y, 10);
+
+        verificarColisao();    
+    }
+
+    setInterval(atualizaTela, 20);
+
+    function leDoTeclado(evento) {
+
+        if(evento.keyCode == cima) {
+
+            y = y - taxa;
+
+        } else if (evento.keyCode == baixo) {
+
+            y = y + taxa;
+
+        } else if (evento.keyCode == esquerda) {
+
+            x = x - taxa;
+
+        } else if (evento.keyCode == direita) {
+
+            x = x + taxa;
+        }
+    }
+
+    document.onkeydown = leDoTeclado;
+
+    function desenhaRetangulo(x, y, tamnhoLadoX, tamanhoLadoY, cor) {
+
+        pincel.fillStyle = cor;
+        pincel.fillRect(x, y, tamnhoLadoX, tamanhoLadoY);
+
+    }
+
+    function desenhaObstaculos(){
+
+        //Paredes
+        desenhaRetangulo(100, 0, 20, 300, "black");
+        desenhaRetangulo(200, 100, 20, 300, "black");
+        desenhaRetangulo(300, 0, 20, 300, "black");
+        desenhaRetangulo(400, 100, 20, 300, "black");
+        desenhaRetangulo(500, 0, 20, 300, "black");
+        desenhaRetangulo(580, 100, 20, 300, "black");
+
+        //linha de chegada
+        desenhaRetangulo(580, 0, 20, 100, "black");
+        desenhaRetangulo(580, 0, 10, 100, "lightgray");
+
+    }
+
+    //tocando no preto
+    function verificarColisao() {
+        if ((x >= 100 && x <= 120 && y - 5 <= 300) ||
+            (x >= 200 && x <= 220 && y + 5 >= 100) ||
+            (x >= 300 && x <= 320 && y - 5 <= 300) ||
+            (x >= 400 && x <= 420 && y + 5 >= 100) ||
+            (x >= 500 && x <= 520 && y - 5 <= 300) ||
+            (x == 580 && y + 5 > 100)) {
+
+                x = 20;
+                y = 20;
+                alert ("Você perdeu!!");
+        }
+
+        //tocando na linha de chegada
+        if(x >= 580 && y + 5 <= 100){
+
+            x = 20;
+            y = 20;
+            alert("Você ganhou!!!");
+        }
+    }
+
+
+
+</script>
